@@ -35,7 +35,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[[BNRItemStore sharedStore] allItems] count];
+    return ([[[BNRItemStore sharedStore] allItems] count] + 1);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -46,9 +46,17 @@
     // Set the text of the cell with description of the item
     // that is at the nth path index of the items, where n = row in this cell
     // will appear in on the tableView
+    
+//    NSInteger lastItem = [[[BNRItemStore sharedStore] allItems] count];
+    NSInteger itemsCount = [[[BNRItemStore sharedStore] allItems] count];
     NSArray *items = [[BNRItemStore sharedStore] allItems];
-    BNRItem *item = items[indexPath.row];
-    cell.textLabel.text = [item description];
+    if (indexPath.row < itemsCount)
+    {
+        BNRItem *item = items[indexPath.row];
+        cell.textLabel.text = [item description];
+    }
+    else
+        cell.textLabel.text = @"No more Item!";
     return cell;
 }
 
@@ -123,6 +131,27 @@
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
     [[BNRItemStore sharedStore] moveItemAtIndex:sourceIndexPath.row toIndex:destinationIndexPath.row];
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
+{
+    NSInteger itemsCount = [[[BNRItemStore sharedStore] allItems] count];
+    if (proposedDestinationIndexPath.row == itemsCount)
+        return sourceIndexPath;
+    return proposedDestinationIndexPath;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSInteger itemsCount = [[[BNRItemStore sharedStore] allItems] count];
+    if (indexPath.row == itemsCount)
+        return NO;
+    return YES;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return @"Remove";
 }
 
 @end
