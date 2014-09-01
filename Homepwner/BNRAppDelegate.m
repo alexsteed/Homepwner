@@ -18,8 +18,12 @@
     // Override point for customization after application launch.
     BNRItemsViewController *itemsViewController = [[BNRItemsViewController alloc] init];
     
+    // Create an instance of UINavigationController
+    // Its stack containsonly itemsViewController
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:itemsViewController];
+    
     // Place BNRItemsViewController in the window hierarchy
-    self.window.rootViewController = itemsViewController;
+    self.window.rootViewController = navController;
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;
