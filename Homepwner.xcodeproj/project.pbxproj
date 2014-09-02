@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		5E7DE57119B42F89007FB912 /* BNRDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E7DE56F19B42F89007FB912 /* BNRDetailViewController.m */; };
 		5E7DE57219B42F89007FB912 /* BNRDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5E7DE57019B42F89007FB912 /* BNRDetailViewController.xib */; };
+		5E7DE57D19B487D4007FB912 /* BNREditDateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E7DE57B19B487D4007FB912 /* BNREditDateViewController.m */; };
+		5E7DE57E19B487D4007FB912 /* BNREditDateViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5E7DE57C19B487D4007FB912 /* BNREditDateViewController.xib */; };
 		5EED6CB619A5AD5B00F270D3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EED6CB519A5AD5B00F270D3 /* Foundation.framework */; };
 		5EED6CB819A5AD5B00F270D3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EED6CB719A5AD5B00F270D3 /* CoreGraphics.framework */; };
 		5EED6CBA19A5AD5B00F270D3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EED6CB919A5AD5B00F270D3 /* UIKit.framework */; };
@@ -40,6 +42,9 @@
 		5E7DE56E19B42F89007FB912 /* BNRDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BNRDetailViewController.h; path = Homepwner/BNRDetailViewController.h; sourceTree = "<group>"; };
 		5E7DE56F19B42F89007FB912 /* BNRDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BNRDetailViewController.m; path = Homepwner/BNRDetailViewController.m; sourceTree = "<group>"; };
 		5E7DE57019B42F89007FB912 /* BNRDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BNRDetailViewController.xib; path = Homepwner/BNRDetailViewController.xib; sourceTree = "<group>"; };
+		5E7DE57A19B487D4007FB912 /* BNREditDateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BNREditDateViewController.h; sourceTree = "<group>"; };
+		5E7DE57B19B487D4007FB912 /* BNREditDateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BNREditDateViewController.m; sourceTree = "<group>"; };
+		5E7DE57C19B487D4007FB912 /* BNREditDateViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BNREditDateViewController.xib; sourceTree = "<group>"; };
 		5EED6CB219A5AD5B00F270D3 /* Homepwner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Homepwner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EED6CB519A5AD5B00F270D3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		5EED6CB719A5AD5B00F270D3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -91,6 +96,9 @@
 		5EED6CA919A5AD5B00F270D3 = {
 			isa = PBXGroup;
 			children = (
+				5E7DE57A19B487D4007FB912 /* BNREditDateViewController.h */,
+				5E7DE57B19B487D4007FB912 /* BNREditDateViewController.m */,
+				5E7DE57C19B487D4007FB912 /* BNREditDateViewController.xib */,
 				5E7DE56E19B42F89007FB912 /* BNRDetailViewController.h */,
 				5E7DE56F19B42F89007FB912 /* BNRDetailViewController.m */,
 				5E7DE57019B42F89007FB912 /* BNRDetailViewController.xib */,
@@ -246,6 +254,7 @@
 				5E7DE57219B42F89007FB912 /* BNRDetailViewController.xib in Resources */,
 				5EED6CC019A5AD5B00F270D3 /* InfoPlist.strings in Resources */,
 				5EED6CC819A5AD5B00F270D3 /* Images.xcassets in Resources */,
+				5E7DE57E19B487D4007FB912 /* BNREditDateViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,6 +277,7 @@
 				5EED6CEC19A5D6C900F270D3 /* BNRItemStore.m in Sources */,
 				5EED6CE619A5B1A900F270D3 /* BNRItemsViewController.m in Sources */,
 				5EED6CE919A5B46100F270D3 /* BNRItem.m in Sources */,
+				5E7DE57D19B487D4007FB912 /* BNREditDateViewController.m in Sources */,
 				5EED6CC219A5AD5B00F270D3 /* main.m in Sources */,
 				5EED6CC619A5AD5B00F270D3 /* BNRAppDelegate.m in Sources */,
 			);

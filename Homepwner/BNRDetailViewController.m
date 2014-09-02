@@ -8,13 +8,14 @@
 
 #import "BNRDetailViewController.h"
 #import "BNRItem.h"
+#import "BNREditDateViewController.h"
 
 @interface BNRDetailViewController ()
 
 @property (weak, nonatomic) IBOutlet UITextField *nameField;
 @property (weak, nonatomic) IBOutlet UITextField *serialNumberField;
 @property (weak, nonatomic) IBOutlet UITextField *valueField;
-@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
+@property (weak, nonatomic) IBOutlet UIButton *dateButton;
 
 @end
 
@@ -46,7 +47,7 @@
     }
     
     // Use filtered NSDate Object to set dateLabel contents
-    self.dateLabel.text = [dateFormater stringFromDate:item.dateCreated];
+    [self.dateButton setTitle:[dateFormater stringFromDate:item.dateCreated] forState:UIControlStateNormal];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -61,6 +62,18 @@
     item.itemName = self.nameField.text;
     item.serialNumber = self.serialNumberField.text;
     item.valueInDollars = [self.valueField.text intValue];
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self.valueField resignFirstResponder];
+}
+
+- (IBAction)startDateEditing:(id)sender
+{
+    BNREditDateViewController *editDateViewController = [[BNREditDateViewController alloc] init];
+    editDateViewController.item = _item;
+    [self.navigationController pushViewController:editDateViewController animated:YES];
 }
 
 @end
