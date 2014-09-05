@@ -32,6 +32,10 @@
         _valueInDollars = value;
         _serialNumber = sNumber;
         _dateCreated = [[NSDate alloc] init];
+        // Create an NSUUID object and get his its string representation
+        NSUUID *uuid = [[NSUUID alloc] init];
+        NSString *key = [uuid UUIDString];
+        _itemKey = key;
     }
     return self;
 }
