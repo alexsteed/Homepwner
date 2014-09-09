@@ -9,6 +9,7 @@
 #import "BNRDetailViewController.h"
 #import "BNRItem.h"
 #import "BNRImageStore.h"
+#import "BNRHypnosisView.h"
 
 @interface BNRDetailViewController ()
 
@@ -25,6 +26,13 @@
 
 @implementation BNRDetailViewController
 
+- (IBAction)clearImage:(id)sender
+{
+    NSString *imageKey = self.item.itemKey;
+    [[BNRImageStore sharedStore] deleteImageForKey:imageKey];
+    self.imageView.image = [[BNRImageStore sharedStore] imageForKey:self.item.itemKey];
+}
+
 - (IBAction)takePicture:(id)sender
 {
     UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
@@ -40,6 +48,7 @@
         imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     }
     imagePicker.delegate = self;
+    imagePicker.allowsEditing = YES;
     
     // Place image picker on the screen
     [self presentViewController:imagePicker animated:YES completion:nil];
@@ -47,8 +56,8 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    // Get picked image photo info dictionary
-    UIImage *image = info[UIImagePickerControllerOriginalImage];
+    // Get picked edited image photo info dictionary
+    UIImage *image = info[UIImagePickerControllerEditedImage];
     
     // Store the image in BNRImageStore for this key
     [[BNRImageStore sharedStore] setImage:image forKey:self.item.itemKey];
