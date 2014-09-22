@@ -115,9 +115,39 @@
 {
     [super viewDidLoad];
     
-    self.nameField.delegate = self;
-    self.serialNumberField.delegate = self;
-    self.valueField.delegate = self;
+    UIImageView *iv = [[UIImageView alloc] initWithImage:nil];
+    
+    // The contentMode of the image view in the XIB was fit
+    iv.contentMode = UIViewContentModeScaleAspectFit;
+    
+    // Do not produce a translated constraint for this view
+    iv.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    // The image view was a subview of the view
+    [self.view addSubview:iv];
+    
+    // The image view was pointed by the imageview property
+    self.imageView = iv;
+    
+    // Set the vertical priorities to be less than those of the other subiews
+    [self.imageView setContentHuggingPriority:200 forAxis:UILayoutConstraintAxisVertical];
+    [self.imageView setContentCompressionResistancePriority:700 forAxis:UILayoutConstraintAxisVertical];
+    
+    NSDictionary *nameMap = @{@"imageView" : self.imageView, @"dateLabel" : self.dateLabel, @"toolbar" : self.toolbar};
+    
+    // image is 0 points from superview at left and right edges
+    NSArray *horizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[imageView]-0-|" options:0 metrics:nil views:nameMap];
+    
+    // image is is 8 poitns from dateLabel at its top edge and 8 points from toolbar at its bottom edge
+    NSArray *verticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[dateLabel]-[imageView]-[toolbar]" options:0 metrics:nil views:nameMap];
+    
+    [self.view addConstraints:horizontalConstraints];
+    [self.view addConstraints:verticalConstraints];
+}
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    return YES;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
