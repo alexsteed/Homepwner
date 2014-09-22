@@ -11,6 +11,9 @@
 @class BNRItem;
 @interface BNRDetailViewController : UIViewController
 
+- (instancetype)initForNewItem:(BOOL)isNew;
+
 @property (nonatomic, strong) BNRItem *item;
+@property (nonatomic, copy) void (^dismissBlock) (void);
 
 @end

@@ -94,15 +94,15 @@
 		5EED6CA919A5AD5B00F270D3 = {
 			isa = PBXGroup;
 			children = (
-				5E7DE56E19B42F89007FB912 /* BNRDetailViewController.h */,
-				5E7DE56F19B42F89007FB912 /* BNRDetailViewController.m */,
-				5E7DE57019B42F89007FB912 /* BNRDetailViewController.xib */,
 				5EED6CE719A5B46100F270D3 /* BNRItem.h */,
 				5EED6CE819A5B46100F270D3 /* BNRItem.m */,
 				5EED6CEA19A5D6C900F270D3 /* BNRItemStore.h */,
 				5EED6CEB19A5D6C900F270D3 /* BNRItemStore.m */,
 				5E7DE57F19B82B38007FB912 /* BNRImageStore.h */,
 				5E7DE58019B82B38007FB912 /* BNRImageStore.m */,
+				5E7DE56E19B42F89007FB912 /* BNRDetailViewController.h */,
+				5E7DE56F19B42F89007FB912 /* BNRDetailViewController.m */,
+				5E7DE57019B42F89007FB912 /* BNRDetailViewController.xib */,
 				5EED6CE419A5B1A900F270D3 /* BNRItemsViewController.h */,
 				5EED6CE519A5B1A900F270D3 /* BNRItemsViewController.m */,
 				5EED6CBB19A5AD5B00F270D3 /* Homepwner */,

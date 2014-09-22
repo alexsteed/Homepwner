@@ -8,25 +8,43 @@
 
 #import "BNRDetailViewController.h"
 #import "BNRItem.h"
+#import "BNRItemStore.h"
 #import "BNRImageStore.h"
 
 @interface BNRDetailViewController ()
 
-<UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITextFieldDelegate>
+<UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITextFieldDelegate, UIPopoverControllerDelegate>
 
+@property (strong, nonatomic) UIPopoverController *imagePickerPopover;
 @property (weak, nonatomic) IBOutlet UITextField *nameField;
 @property (weak, nonatomic) IBOutlet UITextField *serialNumberField;
 @property (weak, nonatomic) IBOutlet UITextField *valueField;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *cameraButton;
 
 @end
 
 @implementation BNRDetailViewController
 
+- (void)setItem:(BNRItem *)item
+{
+    _item = item;
+    self.navigationItem.title = _item.itemName;
+}
+
+# pragma mark - picture management
+
 - (IBAction)takePicture:(id)sender
 {
+    if ([self.imagePickerPopover isPopoverVisible])
+    {
+        // If popover is already up, get rid of it
+        [self.imagePickerPopover dismissPopoverAnimated:YES];
+        self.imagePickerPopover = nil;
+        return;
+    }
     UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
     
     // If the device has a camera tale a photo, otherwise just pick
@@ -42,7 +60,21 @@
     imagePicker.delegate = self;
     
     // Place image picker on the screen
-    [self presentViewController:imagePicker animated:YES completion:nil];
+    // Check for iPad before instantiating the popover controller
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
+    {
+        // Create a new popover that will display the imagePicker
+        self.imagePickerPopover = [[UIPopoverController alloc] initWithContentViewController:imagePicker];
+        self.imagePickerPopover.delegate = self;
+        
+        // Display the popover controller; sender is the camera button item
+        [self.imagePickerPopover presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+    }
+    else
+    {
+        // Dismiss the modal image picker
+        [self presentViewController:imagePicker animated:YES completion:nil];
+    }
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
@@ -56,19 +88,33 @@
     // Put that image onto the screen in our image view
     self.imageView.image = image;
     
-    // Take image picker off the the screen, you must call this dismiss method
-    [self dismissViewControllerAnimated:YES completion:nil];
+    // Do I have a popover?
+    if (self.imagePickerPopover)
+    {
+        [self.imagePickerPopover dismissPopoverAnimated:YES];
+        self.imagePickerPopover = nil;
+    }
+    else
+    {
+        // Dismiss the modal image picker
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
-- (void)setItem:(BNRItem *)item
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
 {
-    _item = item;
-    self.navigationItem.title = _item.itemName;
+    NSLog(@"User dismissed popover");
+    self.imagePickerPopover = nil;
 }
+
+# pragma mark - view events
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    UIInterfaceOrientation io = [[UIApplication sharedApplication] statusBarOrientation];
+    [self prepareViewForOrientation:io];
     
     BNRItem *item = self.item;
     
@@ -145,6 +191,8 @@
     [self.view addConstraints:verticalConstraints];
 }
 
+# pragma mark - text field management
+
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
     return YES;
@@ -159,6 +207,73 @@
 - (IBAction)backGroundTapped:(id)sender
 {
     [self.view endEditing:YES];
+}
+
+# pragma mark - interface orientation management
+
+- (void)prepareViewForOrientation:(UIInterfaceOrientation)orientation
+{
+    // Is it an iPad? No preparation necessary
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
+    {
+        return;
+    }
+
+    // Is it Landscape?
+    if (UIInterfaceOrientationIsLandscape(orientation))
+    {
+        self.imageView.hidden = YES;
+        self.cameraButton.enabled = NO;
+    }
+    else
+    {
+        self.imageView.hidden = NO;
+        self.cameraButton.enabled = YES;
+    }
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    [self prepareViewForOrientation:toInterfaceOrientation];
+}
+
+# pragma mark - new item
+
+- (instancetype)initForNewItem:(BOOL)isNew
+{
+    self = [super initWithNibName:nil bundle:nil];
+    
+    if (self)
+    {
+        if (isNew)
+        {
+            UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(save:)];
+            self.navigationItem.rightBarButtonItem = doneItem;
+            
+            UIBarButtonItem *cancelItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
+            self.navigationItem.leftBarButtonItem = cancelItem;
+        }
+    }
+    return self;
+}
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    @throw [NSException exceptionWithName:@"Wrong initializer" reason:@"Use initForNewItem" userInfo:nil];
+    return nil;
+}
+
+- (void)save:(id)sender
+{
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:self.dismissBlock];
+}
+
+- (void)cancel:(id)sender
+{
+    // If the user cancelled, then remove the BNRItem from the store
+    [[BNRItemStore sharedStore] removeItem:self.item];
+    
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:self.dismissBlock];
 }
 
 @end
