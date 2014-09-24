@@ -13,6 +13,7 @@
 @interface BNRItemStore : NSObject
 
 @property (nonatomic, readonly) NSArray *allItems;
+- (BOOL)saveChanges;
 
 + (instancetype)sharedStore;
 - (BNRItem *)createItem;

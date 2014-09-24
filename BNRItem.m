@@ -10,6 +10,31 @@
 
 @implementation BNRItem
 
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:self.itemName forKey:@"itemName"];
+    [aCoder encodeObject:self.serialNumber forKey:@"serialNumber"];
+    [aCoder encodeObject:self.dateCreated forKey:@"dateCreated"];
+    [aCoder encodeObject:self.itemKey forKey:@"itemKey"];
+    
+    [aCoder encodeInt:self.valueInDollars forKey:@"valueInDollars"];
+}
+
+- (BNRItem *)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super init];
+    if (self)
+    {
+        _itemName =[aDecoder decodeObjectForKey:@"itemName"];
+        _serialNumber =[aDecoder decodeObjectForKey:@"serialNumber"];
+        _dateCreated =[aDecoder decodeObjectForKey:@"dateCreated"];
+        _itemKey =[aDecoder decodeObjectForKey:@"itemKey"];
+
+        _valueInDollars =[aDecoder decodeIntForKey:@"valueInDollars"];
+    }
+    return self;
+}
+
 + (instancetype)randomItem
 {
     NSArray *randomAdjectiveList = @[@"Fluffy", @"Rusty", @"Shiny"];

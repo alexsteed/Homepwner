@@ -18,14 +18,28 @@
 
 @implementation BNRItemStore
 
-+ (instancetype)sharedStore
+#pragma mark - Items archiving
+
+- (NSString *)itemArchivePath
 {
-    static BNRItemStore *sharedStore = nil;
+    // Make sure that the first argument is NSDocumentDirectory and not NSDocumentationDirectory
+    NSArray *documentDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{sharedStore = [[self alloc] initPrivate];});
-    return sharedStore;
+    // Get the one document directory from that list
+    NSString *documentDirectory= [documentDirectories firstObject];
+    
+    return [documentDirectory stringByAppendingPathComponent:@"items.archive"];
 }
+
+- (BOOL)saveChanges
+{
+    NSString *path = [self itemArchivePath];
+    
+    // Returns YES on success
+    return [NSKeyedArchiver archiveRootObject:self.privateItems toFile:path];
+}
+
+#pragma mark - Initialization
 
     // If a program calls [[BNRItem alloc] init] tell him the error of his ways
 - (instancetype)init
@@ -40,9 +54,27 @@
     self = [super init];
     if (self)
     {
-        _privateItems = [[NSMutableArray alloc] init];
+        NSString *path = [self itemArchivePath];
+        _privateItems = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+        
+        // If the array hadn't been saved previously, create a new empty one
+        if (!_privateItems)
+        {
+            _privateItems = [[NSMutableArray alloc] init];
+        }
     }
     return self;
+}
+
+#pragma mark - Items management
+
++ (instancetype)sharedStore
+{
+    static BNRItemStore *sharedStore = nil;
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{sharedStore = [[self alloc] initPrivate];});
+    return sharedStore;
 }
 
 - (NSArray *)allItems
@@ -52,7 +84,7 @@
 
 - (BNRItem *) createItem
 {
-    BNRItem *item = [BNRItem randomItem];
+    BNRItem *item = [[BNRItem alloc] init];
     
     [self.privateItems addObject:item];
     
