@@ -82,7 +82,7 @@
     return self.privateItems;
 }
 
-- (BNRItem *) createItem
+- (BNRItem *)createItem
 {
     BNRItem *item = [[BNRItem alloc] init];
     
